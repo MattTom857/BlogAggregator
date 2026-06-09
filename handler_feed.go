@@ -15,10 +15,6 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 	}
 	name := cmd.Args[0]
 	url := cmd.Args[1]
-	//user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
-	//if err != nil {
-	//	return fmt.Errorf("trouble with the current user: %w", err)
-	//}
 	params1 := database.CreateFeedParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
@@ -53,7 +49,7 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 }
 
 func handlerListFeeds(s *state, _ command) error {
-	feeds, err := s.db.Feeds(context.Background())
+	feeds, err := s.db.GetFeeds(context.Background())
 	if err != nil {
 		return fmt.Errorf("trouble getting the feeds: %w", err)
 	}
@@ -76,4 +72,5 @@ func printFeed(feed database.Feed, user database.User) {
 	fmt.Printf("* Name:          %s\n", feed.Name)
 	fmt.Printf("* URL:           %s\n", feed.Url)
 	fmt.Printf("* User:          %s\n", user.Name)
+	fmt.Printf("* LastFetchedAt: %s\n", feed.LastFetchedAt.Time)
 }
